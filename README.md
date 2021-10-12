@@ -1,1 +1,2 @@
-# rethink_minist_robust
+# Rethinking the Adversarial Robust Model on MNIST
+
