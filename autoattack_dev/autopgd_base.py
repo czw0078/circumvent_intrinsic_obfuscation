@@ -118,8 +118,7 @@ class APGDAttack():
             device=None,
             use_largereps=False,
             is_tf_model=False,
-            logger=None,
-            know_defense=None): # cw
+            logger=None): 
         """
         AutoPGD implementation in PyTorch
         """
@@ -146,7 +145,6 @@ class APGDAttack():
         self.is_tf_model = is_tf_model
         self.y_target = None
         self.logger = logger
-        self.know_defense=know_defense # cw
     
     def init_hyperparam(self, x):
         assert self.norm in ['Linf', 'L2', 'L1']
@@ -462,10 +460,6 @@ class APGDAttack():
         :param best_loss:   if True the points attaining highest loss
                             are returned, otherwise adversarial examples
         """
-        # cw
-        if self.know_defense != None:
-            x = self.know_defense(x)
-
         assert self.loss in ['ce', 'dlr'] #'ce-targeted-cfts'
         if not y is None and len(y.shape) == 0:
             x.unsqueeze_(0)

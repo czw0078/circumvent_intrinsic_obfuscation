@@ -10,7 +10,7 @@ from autoattack_dev import checks
 class AutoAttack():
     def __init__(self, model, norm='Linf', eps=.3, seed=None, verbose=True,
                  attacks_to_run=[], version='standard', is_tf_model=False,
-                 device='cuda', log_path=None, know_defense=None): # know_defense cw
+                 device='cuda', log_path=None): 
         self.model = model
         self.norm = norm
         assert norm in ['Linf', 'L2', 'L1']
@@ -22,13 +22,12 @@ class AutoAttack():
         self.is_tf_model = is_tf_model
         self.device = device
         self.logger = Logger(log_path)
-        self.know_defense = know_defense # cw
         
         if not self.is_tf_model:
             from .autopgd_base import APGDAttack
             self.apgd = APGDAttack(self.model, n_restarts=5, n_iter=100, verbose=False,
                 eps=self.epsilon, norm=self.norm, eot_iter=1, rho=.75, seed=self.seed,
-                device=self.device, logger=self.logger, know_defense=self.know_defense) # know_defense cw
+                device=self.device, logger=self.logger) 
             
             from .fab_pt import FABAttack_PT
             self.fab = FABAttack_PT(self.model, n_restarts=5, n_iter=100, eps=self.epsilon, seed=self.seed,
