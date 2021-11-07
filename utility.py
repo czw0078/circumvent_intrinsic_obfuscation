@@ -2,7 +2,7 @@ import torch
 import torch.nn as nn
 
 class LeNet(nn.Module):
-    def __init__(self): # TODO change the name from conv1 to cnn1
+    def __init__(self): 
         super(LeNet, self).__init__() # can be just super() in python 3
         self.conv1 = nn.Sequential(         
             nn.Conv2d(
