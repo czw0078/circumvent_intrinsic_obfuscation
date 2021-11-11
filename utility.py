@@ -2,12 +2,12 @@ import torch
 import torch.nn as nn
 
 class LeNet(nn.Module):
-    def __init__(self): 
+    def __init__(self):
         super(LeNet, self).__init__() # can be just super() in python 3
-        self.conv1 = nn.Sequential(         
+        self.cnn1 = nn.Sequential(         
             nn.Conv2d(
                 in_channels=1,  # Number of channels in the input image      
-                out_channels=16, # Number of channels produced by the convolution           
+                out_channels=32, # Number of channels produced by the convolution           
                 kernel_size=5,              
                 stride=1,                   
                 padding=2, # half of the kernel size 5 except middle 1       
@@ -15,24 +15,27 @@ class LeNet(nn.Module):
             nn.ReLU(),                      
             nn.MaxPool2d(kernel_size=2),    
         )
-        self.conv2 = nn.Sequential(         
-            nn.Conv2d(16, 32, 5, 1, 2),     
+        self.cnn2 = nn.Sequential(         
+            nn.Conv2d(32, 64, 5, 1, 2),     
             nn.ReLU(),                      
             nn.MaxPool2d(2),       
         )
         # fully connected layer, output 10 classes
-        self.out = nn.Linear(32 * 7 * 7, 10)
+        
+        self.fc1 = nn.Linear(64 * 7 * 7, 1024)
+        self.fc2 = nn.Linear(1024, 10)
         
     def forward(self, x):
-        x = self.conv1(x)
-        x = self.conv2(x)
-        # flatten the output of conv2 to (batch_size, 32 * 7 * 7)
-        x = x.view(x.size(0), -1)       
-        output = self.out(x)
-        return output    # do not return x for visualization
+        x = self.cnn1(x)
+        x = self.cnn2(x)
+        # flatten the output of conv2 to (batch_size, 64 * 7 * 7)
+        x = x.view(x.size(0), -1)    
+        x = self.fc1(x)
+        x = self.fc2(torch.relu(x))
+        return x
 
 def network():
-    net = torch.load('./data/LeNet.pt')
+    net = torch.load('./data/LeNet_32.pt')
     net.eval()
     return net
 
